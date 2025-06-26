@@ -1,77 +1,49 @@
 from flask import request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, Song
+from models.db import db
+from models.song import Song
 from utils.cloudinary import upload_mp3
 
-
 @jwt_required()
-def create_song():
+def add_song():
+    title = request.form.get("title")
+    artist = request.form.get("artist")
+    album_cover = request.form.get("album_cover")  # 🔁 replaces genre
+    file = request.files.get("file")
 
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part"}), 400
+    if not title or not artist or not file:
+        return jsonify({"error": "Title, artist, and MP3 file are required"}), 400
 
-    file = request.files['file']
-    title = request.form.get('title')
-    artist = request.form.get('artist')
-    genre = request.form.get('genre')
+    if not file.filename.endswith(".mp3"):
+        return jsonify({"error": "Only MP3 files are allowed"}), 400
 
-    if not file or not title or not artist or not genre:
-        return jsonify({"error": "Missing required fields"}), 400
-
-  
-    try:
-        url = upload_mp3(file)
-    except Exception as e:
-        return jsonify({"error": "Upload failed", "details": str(e)}), 500
-    
+    url = upload_mp3(file)
     user_id = get_jwt_identity()
 
-    song = Song(title=title, artist=artist, genre=genre, url=url, user_id=user_id)
+    song = Song(
+        title=title,
+        artist=artist,
+        album_cover=album_cover,
+        url=url,
+        user_id=user_id
+    )
     db.session.add(song)
     db.session.commit()
 
-    return jsonify({
-        "id": song.id,
-        "title": song.title,
-        "artist": song.artist,
-        "genre": song.genre,
-        "url": song.url,
-        "user_id": song.user_id
-    }), 201
-
+    return jsonify(song.serialize()), 201
 
 def get_all_songs():
     songs = Song.query.all()
-    return jsonify([
-        {
-            "id": s.id,
-            "title": s.title,
-            "artist": s.artist,
-            "genre": s.genre,
-            "url": s.url,
-            "user_id": s.user_id
-        }
-        for s in songs
-    ]), 200
-
+    return jsonify([song.serialize() for song in songs]), 200
 
 def search_songs():
-    q = request.args.get('q', '').lower()
-    if not q:
-        return jsonify([]), 200
+    query = request.args.get("q", "").lower()
+    if not query:
+        return get_all_songs()
 
     songs = Song.query.filter(
-        (Song.title.ilike(f'%{q}%')) | (Song.artist.ilike(f'%{q}%'))
+        (Song.title.ilike(f"%{query}%")) |
+        (Song.artist.ilike(f"%{query}%"))
     ).all()
 
-    return jsonify([
-        {
-            "id": s.id,
-            "title": s.title,
-            "artist": s.artist,
-            "genre": s.genre,
-            "url": s.url,
-            "user_id": s.user_id
-        }
-        for s in songs
-    ]), 200
+    return jsonify([song.serialize() for song in songs]), 200
