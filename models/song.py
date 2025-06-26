@@ -6,7 +6,7 @@ class Song(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     artist = db.Column(db.String(120), nullable=False)
-    album_cover = db.Column(db.String(255))  # 🔁 Replaced genre
+    album_cover = db.Column(db.String(255)) 
     url = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
@@ -19,3 +19,4 @@ class Song(db.Model):
             "url": self.url,
             "user_id": self.user_id
         }
+
