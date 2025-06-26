@@ -1,16 +1,21 @@
-from db import db
+from models.db import db
 
-class Song(db.Model):  
+class Song(db.Model):
     __tablename__ = 'songs'
-    
-    id = db.Column(db.Integer, primary_key=True) 
-    title = db.Column(db.String, nullable=False)
-    artist = db.Column(db.String, nullable=False)
-    genre = db.Column(db.String, nullable=False)  
-    url = db.Column(db.String, nullable=False)    
-    user_id = db.Column(db.String, nullable=False)
-    
-    user = db.relationship('User', back_populates='songs')  
-    
-    def __repr__(self): 
-        return f'<Song {self.id} | {self.title} | {self.artist} | {self.genre} | {self.url}>'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    artist = db.Column(db.String(120), nullable=False)
+    album_cover = db.Column(db.String(255))  # 🔁 Replaced genre
+    url = db.Column(db.String(255), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "artist": self.artist,
+            "album_cover": self.album_cover,
+            "url": self.url,
+            "user_id": self.user_id
+        }
