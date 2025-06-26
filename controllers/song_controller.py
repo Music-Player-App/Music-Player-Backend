@@ -8,7 +8,7 @@ from utils.cloudinary import upload_mp3
 def add_song():
     title = request.form.get("title")
     artist = request.form.get("artist")
-    album_cover = request.form.get("album_cover") 
+    album_cover = request.form.get("album_cover")  # 🔁 replaces genre
     file = request.files.get("file")
 
     if not title or not artist or not file:
