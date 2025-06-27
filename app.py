@@ -21,10 +21,9 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app, supports_credentials=True)
 
-# Create tables immediately when app starts (for both local & Render)
 with app.app_context():
     db.create_all()
-    print("✅ Tables created at startup")
+    print("Tables created at startup")
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
