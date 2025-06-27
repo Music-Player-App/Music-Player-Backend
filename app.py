@@ -15,11 +15,15 @@ load_dotenv()
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Init extensions
+# Initialize extensions
 db.init_app(app)
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app, supports_credentials=True)
+
+with app.app_context():
+    db.create_all()
+    print("Tables created at startup")
 
 # Register Blueprints
 app.register_blueprint(auth_bp)
@@ -27,7 +31,8 @@ app.register_blueprint(song_bp)
 
 @app.route("/")
 def index():
-    return {"message": "Music Player Backend is live "}
+    return {"message": "Music Player Backend is live"}
 
+# Run the server
 if __name__ == "__main__":
     app.run(debug=True)
