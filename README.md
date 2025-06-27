@@ -15,7 +15,6 @@ A backend service for a music player web application connected to a React fronte
 - register_user: handles user creation, hashes the password, and stores it in the DB.
 - login_user: validates credentials, returns a JWT token.
 - get_profile uses token to identify the user and return their info.
-
 ---
 ### Music Handling (song routes)
 - add_song uploads files to Cloudinary, saves song metadata + URLs + user ID in the DB.
