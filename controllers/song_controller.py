@@ -8,16 +8,21 @@ from utils.cloudinary import upload_mp3
 def add_song():
     title = request.form.get("title")
     artist = request.form.get("artist")
-    album_cover = request.form.get("album_cover") 
+    album_cover = request.form.get("album_cover") or ""  # Optional
     file = request.files.get("file")
 
+    # Validate input
     if not title or not artist or not file:
-        return jsonify({"error": "Title, artist, and MP3 file are required"}), 400
+        return jsonify({"error": "Title, artist, and MP3 file are required."}), 400
 
-    if not file.filename.endswith(".mp3"):
-        return jsonify({"error": "Only MP3 files are allowed"}), 400
+    if not file.filename.lower().endswith(".mp3"):
+        return jsonify({"error": "Only MP3 files are allowed."}), 400
 
-    url = upload_mp3(file)
+    try:
+        url = upload_mp3(file)
+    except Exception as e:
+        return jsonify({"error": f"Cloudinary upload failed: {str(e)}"}), 500
+
     user_id = get_jwt_identity()
 
     song = Song(
@@ -32,15 +37,18 @@ def add_song():
 
     return jsonify(song.serialize()), 201
 
+
 def get_all_songs():
     songs = Song.query.all()
     return jsonify([song.serialize() for song in songs]), 200
 
+
 def search_songs():
-    query = request.args.get("q", "").lower()
+    query = request.args.get("q", "")
     if not query:
         return get_all_songs()
 
+    query = query.lower()
     songs = Song.query.filter(
         (Song.title.ilike(f"%{query}%")) |
         (Song.artist.ilike(f"%{query}%"))
