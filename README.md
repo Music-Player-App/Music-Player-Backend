@@ -19,6 +19,9 @@ A backend service for a music player web application connected to a React fronte
 ---
 ### Music Handling (song routes)
 - add_song uploads files to Cloudinary, saves song metadata + URLs + user ID in the DB.
+- get_all_songs returns a list of songs with:
+  title, artist, album_cover_url, audio_url
+- search_songs filters songs based on the title or artist.
 
 
 
