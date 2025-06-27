@@ -24,7 +24,10 @@ A backend service for a music player web application connected to a React fronte
 
 ### Resources
 - Navigate to 
-
+```Bash
+requirements.txt
+```
+- All requirements/tools are listed!
 
 
 
