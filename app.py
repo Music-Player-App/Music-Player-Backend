@@ -27,7 +27,4 @@ app.register_blueprint(song_bp)
 
 @app.route("/")
 def index():
-    return {"message": "Music Player Backend is live "}
-
-if __name__ == "__main__":
-    app.run(debug=True)
+    return {"message": "Music Player Backend is live"}
