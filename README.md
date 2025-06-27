@@ -10,7 +10,9 @@ A backend service for a music player web application connected to a React fronte
 - Connected to a React frontend for UI and playback
 
 ## How it works
-
+### User Authentication (auth routes)
+- Backend (Flask):
+  register_user handles user creation, hashes the password, and stores it in the DB.
 
 
 
