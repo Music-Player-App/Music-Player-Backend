@@ -7,7 +7,7 @@ A backend service for a music player web application connected to a React fronte
 - Integration with Cloudinary for media file storage (images + audio)
 - Song ownership via foreign key relationship to the user
 - Routes for both users and songs
-- Connected to a React frontend for UI and playback
+- Connected to a React frontend 
 ## How it works
 ### User Authentication (auth routes)
 - (Flask):
