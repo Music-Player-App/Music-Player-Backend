@@ -46,12 +46,12 @@ def get_all_songs():
 def search_songs():
     query = request.args.get("q", "")
     if not query:
-        return get_all_songs()
-
-    query = query.lower()
-    songs = Song.query.filter(
-        (Song.title.ilike(f"%{query}%")) |
-        (Song.artist.ilike(f"%{query}%"))
-    ).all()
+        songs = Song.query.all()
+    else:
+        query = query.lower()
+        songs = Song.query.filter(
+            (Song.title.ilike(f"%{query}%")) |
+            (Song.artist.ilike(f"%{query}%"))
+        ).all()
 
     return jsonify([song.serialize() for song in songs]), 200
