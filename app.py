@@ -28,3 +28,10 @@ app.register_blueprint(song_bp)
 @app.route("/")
 def index():
     return {"message": "Music Player Backend is live"}
+
+# Create tables when app starts
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+        print("Tables created.")
+    app.run(debug=True)
