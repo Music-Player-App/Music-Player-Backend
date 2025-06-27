@@ -21,6 +21,13 @@ bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 CORS(app, supports_credentials=True)
 
+# Ensure DB tables are created on first request (for Render or other deployments)
+@app.before_first_request
+def create_tables():
+    with app.app_context():
+        db.create_all()
+        print("✅ Tables created on first request")
+
 # Register Blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(song_bp)
@@ -29,9 +36,9 @@ app.register_blueprint(song_bp)
 def index():
     return {"message": "Music Player Backend is live"}
 
-# Run and create tables
+# Local run and create tables
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-        print("✅ Tables created.")
+        print("✅ Tables created locally")
     app.run(debug=True)
