@@ -9,7 +9,8 @@ A backend service for a music player web application connected to a React fronte
 - Routes for both users and songs
 - Connected to a React frontend for UI and playback
 
-## Setup & Installation
+## How it works
+
 
 
 
