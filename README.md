@@ -13,6 +13,8 @@ A backend service for a music player web application connected to a React fronte
 ### User Authentication (auth routes)
 - Backend (Flask):
   register_user handles user creation, hashes the password, and stores it in the DB.
+- Backend:
+  login_user validates credentials, returns a JWT token.
 
 
 
