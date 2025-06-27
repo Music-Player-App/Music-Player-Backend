@@ -8,7 +8,6 @@ A backend service for a music player web application connected to a React fronte
 - Song ownership via foreign key relationship to the user
 - Routes for both users and songs
 - Connected to a React frontend for UI and playback
-
 ## How it works
 ### User Authentication (auth routes)
 - (Flask):
@@ -21,7 +20,6 @@ A backend service for a music player web application connected to a React fronte
 - get_all_songs returns a list of songs with:
   title, artist, album_cover_url, audio_url
 - search_songs filters songs based on the title or artist.
-
 ### Resources
 - Navigate to 
 ```Bash
