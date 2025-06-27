@@ -40,7 +40,6 @@ def login_user():
     access_token = create_access_token(identity=user.id)
 
     response = jsonify(user.serialize())
-
     response.set_cookie(
         "access_token_cookie",
         access_token,
@@ -49,7 +48,6 @@ def login_user():
         samesite="None",
         max_age=86400  # 1 day
     )
-
     return response
 
 @jwt_required()
@@ -58,21 +56,18 @@ def get_profile():
     user = User.query.get(user_id)
     if not user:
         return jsonify({"message": "User not found"}), 404
-
     return jsonify(user.serialize()), 200
 
 @jwt_required()
 def update_profile():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
-
     if not user:
         return jsonify({"message": "User not found"}), 404
 
     data = request.get_json()
     user.username = data.get("username", user.username)
-    user.email = data.get("email", user.email)
-
+    user.email    = data.get("email", user.email)
     db.session.commit()
     return jsonify(user.serialize()), 200
 
@@ -80,10 +75,34 @@ def update_profile():
 def delete_profile():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
-
     if not user:
         return jsonify({"message": "User not found"}), 404
 
     db.session.delete(user)
     db.session.commit()
     return jsonify({"message": "User deleted successfully"}), 200
+
+@jwt_required()
+def change_password():
+    """
+    Change the logged-in user's password.
+    Expects JSON: { old_password: string, new_password: string }
+    """
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+    old_pw = data.get("old_password")
+    new_pw = data.get("new_password")
+
+    if not old_pw or not new_pw:
+        return jsonify({"message": "Both old and new passwords are required"}), 400
+
+    if not user.check_password(old_pw):
+        return jsonify({"message": "Current password is incorrect"}), 401
+
+    user.set_password(new_pw)
+    db.session.commit()
+    return jsonify({"message": "Password changed successfully"}), 200
