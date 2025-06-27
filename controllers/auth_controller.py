@@ -3,6 +3,7 @@ from models.db import db
 from models.user import User
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from utils.auth import hash_password, verify_password
+import os
 
 def register_user():
     data = request.get_json()
@@ -33,8 +34,18 @@ def login_user():
         return jsonify({"message": "Invalid credentials"}), 401
 
     access_token = create_access_token(identity=user.id)
-    response = jsonify({"message": "Login successful"})
-    response.set_cookie("access_token_cookie", access_token, httponly=True)
+
+    response = jsonify(user.serialize())  
+
+    response.set_cookie(
+        "access_token_cookie",
+        access_token,
+        httponly=True,
+        secure=True,              
+        samesite="None",          
+        max_age=86400             
+    )
+
     return response
 
 @jwt_required()
