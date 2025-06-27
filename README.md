@@ -1,5 +1,5 @@
 # Music-Player-Backend
-A backend API for a music player application that handles user authentication and music library management.
+A backend service for a music player web application built with Node.js and Express, connected to a React frontend. It handles user authentication, song management, and secure media storage using Cloudinary.
 ---
 ## Features
 - User registration and login with password hashing and JWT authentication
