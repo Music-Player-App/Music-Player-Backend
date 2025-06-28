@@ -1,0 +1,39 @@
+# Music-Player-Backend
+A backend service for a music player web application connected to a React frontend. It handles user authentication, song management, and secure media storage using Cloudinary.
+---
+## Features
+- User registration and login with password hashing and JWT authentication
+- Upload and manage songs, including title, artist, album cover, and audio URL
+- Integration with Cloudinary for media file storage (images + audio)
+- Song ownership via foreign key relationship to the user
+- Routes for both users and songs
+- Connected to a React frontend 
+
+### Resources
+---
+- Navigate to 
+```Bash
+requirements.txt
+```
+- All requirements/tools are listed!
+---
+  ## How it works
+### User Authentication (auth routes)
+- (Flask):
+- register_user: handles user creation, hashes the password, and stores it in the DB.
+- login_user: validates credentials, returns a JWT token.
+- get_profile uses token to identify the user and return their info.
+---
+### Music Handling (song routes)
+- add_song uploads files to Cloudinary, saves song metadata + URLs + user ID in the DB.
+- get_all_songs returns a list of songs with:
+  title, artist, album_cover_url, audio_url
+- search_songs filters songs based on the title or artist.
+
+
+
+
+
+
+
+
