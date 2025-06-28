@@ -29,6 +29,7 @@ requirements.txt
 - get_all_songs returns a list of songs with:
   title, artist, album_cover_url, audio_url
 - search_songs filters songs based on the title or artist.
+---
 
 
 
